@@ -1,26 +1,25 @@
-import React, { useEffect } from "react";
-import { ZoomMtg } from "@zoomus/websdk";
-
-let apiKeys = {
-  apiKey: process.env.REACT_APP_ZOOM_API_KEY,
-  apiSecret: process.env.REACT_APP_ZOOM_API_SECRET_KEY,
-};
-let meetConfig = {
-  apiKey: apiKeys.apiKey,
-  meetingNumber: "71289544336",
-  userName: "Example",
-  userEmail: "example@example.com", // must be the attendee email address
-  passWord: "0hZeCd",
-  role: 0,
-};
+import React, {useContext, useEffect} from 'react';
+import ZoomContext from './context/ZoomContext';
+import {ZoomMtg} from '@zoomus/websdk';
 
 function App() {
+  const {apiKeys} = useContext(ZoomContext);
+
+  let meetConfig = {
+    apiKey: apiKeys.apiKey,
+    meetingNumber: '8735636752',
+    userName: 'Example',
+    userEmail: 'example@example.com', // must be the attendee email address
+    passWord: 'UHRRUUVhdWNiS2xFY0l5emdOL0NSZz09',
+    role: 0,
+  };
+
   function joinMeeting(signature, meetConfig) {
     ZoomMtg.init({
-      leaveUrl: "https://zoom.us/",
+      leaveUrl: 'https://zoom.us/',
       isSupportAV: true,
       success: function (success) {
-        console.log("Init Success ", success);
+        console.log('Init Success ', success);
         ZoomMtg.join({
           meetingNumber: meetConfig.meetingNumber,
           userName: meetConfig.userName,
@@ -28,11 +27,11 @@ function App() {
           apiKey: meetConfig.apiKey,
           passWord: meetConfig.passWord,
 
-          success: (success) => {
+          success: success => {
             console.log(success);
           },
 
-          error: (error) => {
+          error: error => {
             console.log(error);
           },
         });
@@ -40,7 +39,7 @@ function App() {
     });
   }
   useEffect(() => {
-    ZoomMtg.setZoomJSLib("https://source.zoom.us/1.7.10/lib", "/av");
+    ZoomMtg.setZoomJSLib('https://source.zoom.us/1.7.10/lib', '/av');
     ZoomMtg.preLoadWasm();
     ZoomMtg.prepareJssdk();
 
@@ -55,14 +54,14 @@ function App() {
       apiSecret: apiKeys.apiSecret,
       role: meetConfig.role,
       success: function (res) {
-        console.log("res", res);
+        console.log('res', res);
 
         setTimeout(() => {
           joinMeeting(res.result, meetConfig);
         }, 1000);
       },
     });
-  }, []);
+  }, [apiKeys.apiSecret, meetConfig]);
 
   return <div className="App">Zoom Testing</div>;
 }
