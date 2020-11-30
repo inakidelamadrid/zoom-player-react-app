@@ -16,10 +16,16 @@ function App() {
 
   function joinMeeting(signature, meetConfig) {
     ZoomMtg.init({
-      leaveUrl: 'https://zoom.us/',
+      audioPanelAlwaysOpen: false,
+      disableCallOut: true,
+      disableJoinAudio: true,
+      disableVoIP: true,
       isSupportAV: true,
+      isSupportChat: false,
+      leaveUrl: 'https://zoom.us/',
+      screenShare: false,
+      showPureSharingContent: true,
       success: function (success) {
-        console.log('Init Success ', success);
         ZoomMtg.join({
           meetingNumber: meetConfig.meetingNumber,
           userName: meetConfig.userName,
